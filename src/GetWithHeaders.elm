@@ -1,5 +1,9 @@
 module GetWithHeaders(get, Headers) where
 
+{-| This library takes from elm-http the minimum needed to
+    add HTTP headers to the request and return them from the response.
+ -}
+
 import Http exposing (send, empty, defaultSettings
     , Response, Value(..)
     , Error(..), RawError(..))
@@ -7,11 +11,14 @@ import Task exposing (Task, andThen, mapError, succeed, fail)
 import Json.Decode as Json
 import Dict exposing (Dict)
 
-
+{-| Headers are represented as a list of key-value tuples.
+ -}
 type alias Headers = List (String, String)
 
-
-get: Json.Decoder value -> Headers -> String -> Task Error (value, Headers)
+{-| Given headers and a body, return an HTTP GET task
+    that produces headers and a decoded body.
+ -}
+get: Json.Decoder value -> Headers -> String -> Task Error (Headers, value)
 get decoder headers url =
   let
     request =
@@ -25,7 +32,7 @@ get decoder headers url =
       fromJsonWithHeaders decoder (send defaultSettings request)
 
 
-fromJsonWithHeaders : Json.Decoder a -> Task RawError Response -> Task Error (a, Headers)
+fromJsonWithHeaders : Json.Decoder a -> Task RawError Response -> Task Error (Headers, a)
 fromJsonWithHeaders decoder response =
   let decode str =
         case Json.decodeString decoder str of
@@ -43,7 +50,7 @@ promoteError rawError =
     RawNetworkError -> NetworkError
 
 
-handleResponseWithHeaders : (String -> Task Error a) -> Response -> Task Error (a, Headers)
+handleResponseWithHeaders : (String -> Task Error a) -> Response -> Task Error (Headers, a)
 handleResponseWithHeaders handle response =
   case 200 <= response.status && response.status < 300 of
     False ->
@@ -53,5 +60,5 @@ handleResponseWithHeaders handle response =
           Text str ->
             str
               |> handle
-              |> Task.map (\v -> (v, (Dict.toList response.headers)))
+              |> Task.map (\v -> ((Dict.toList response.headers), v))
           _ -> fail (UnexpectedPayload "Response body is a blob, expecting a string.")
