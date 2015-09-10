@@ -2,6 +2,13 @@ module GetWithHeaders(get, Headers) where
 
 {-| This library takes from elm-http the minimum needed to
     add HTTP headers to the request and return them from the response.
+
+# useful methods
+@docs get
+
+# handy type alias
+@docs Headers
+
  -}
 
 import Http exposing (send, empty, defaultSettings
