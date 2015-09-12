@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "summary": "send and receive http requests with headers",
     "repository": "https://github.com/jessitron/elm-http-with-headers.git",
     "license": "BSD3",

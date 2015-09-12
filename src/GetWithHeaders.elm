@@ -1,10 +1,13 @@
-module GetWithHeaders(get, Headers) where
+module GetWithHeaders(get, Headers, postJson) where
 
 {-| This library takes from elm-http the minimum needed to
     add HTTP headers to the request and return them from the response.
 
 # useful methods
 @docs get
+
+# super useful methods that don't really belong in this file
+@docs postJson
 
 # handy type alias
 @docs Headers
@@ -16,6 +19,7 @@ import Http exposing (send, empty, defaultSettings
     , Error(..), RawError(..))
 import Task exposing (Task, andThen, mapError, succeed, fail)
 import Json.Decode as Json
+import Json.Encode
 import Dict exposing (Dict)
 
 {-| Headers are represented as a list of key-value tuples.
@@ -34,6 +38,24 @@ get decoder headers url =
           headers = headers,
           url =  url,
           body = Http.empty
+      }
+    in
+      fromJsonWithHeaders decoder (send defaultSettings request)
+
+{-| Post Json data with Content-Type set to application/json
+    You may also send and receive other headers.
+
+    Use the Json.Encode package to convert your body into Json.Value
+ -}
+postJson: Json.Decoder value -> Headers -> String -> Json.Value -> Task Error (Headers, value)
+postJson decoder headers url jsonBody =
+  let
+    request =
+      {
+          verb = "POST",
+          headers = headers ++ [("Content-Type", "application/json")],
+          url =  url,
+          body = Http.string (Json.Encode.encode 0 jsonBody)
       }
     in
       fromJsonWithHeaders decoder (send defaultSettings request)
