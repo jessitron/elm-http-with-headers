@@ -1,4 +1,4 @@
-module GetWithHeaders(get, Headers, postJson) where
+module GetWithHeaders exposing (get, Headers, postJson)
 
 {-| This library takes from elm-http the minimum needed to
     add HTTP headers to the request and return them from the response.
@@ -12,7 +12,7 @@ module GetWithHeaders(get, Headers, postJson) where
 # handy type alias
 @docs Headers
 
- -}
+-}
 
 import Http exposing (send, empty, defaultSettings
     , Response, Value(..)
