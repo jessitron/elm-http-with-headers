@@ -1,5 +1,5 @@
 {
-    "version": "1.1.0",
+    "version": "1.1.1",
     "summary": "send and receive http requests with headers",
     "repository": "https://github.com/jessitron/elm-http-with-headers.git",
     "license": "BSD3",
@@ -10,8 +10,8 @@
         "GetWithHeaders"
     ],
     "dependencies": {
-        "elm-lang/core": "2.1.0 <= v < 3.0.0",
-        "evancz/elm-http": "2.0.0 <= v < 3.0.0"
+        "elm-lang/core": "4.0.0 <= v < 5.0.0",
+        "evancz/elm-http": "3.0.1 <= v < 4.0.0"
     },
-    "elm-version": "0.15.1 <= v < 0.16.0"
+    "elm-version": "0.17.0 <= v < 0.18.0"
 }
